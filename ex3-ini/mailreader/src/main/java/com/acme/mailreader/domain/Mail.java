@@ -1,6 +1,7 @@
 package com.acme.mailreader.domain;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 import com.acme.mailreader.domain.DateIncorrecteException.ErreurDate;
 
@@ -26,6 +27,11 @@ public class Mail {
 		public Builder date(Instant instant) throws DateIncorrecteException {
 			mailConstruit.setDate(instant);
 			return this;
+		}
+		
+		public Builder date(int year, int month, int day) throws DateIncorrecteException{
+			LocalDate dateInt = new );
+			mailConstruit.setDate(dateInt);
 		}
 
 		public Builder important(boolean important) {

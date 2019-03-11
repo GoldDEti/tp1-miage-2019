@@ -7,31 +7,58 @@ import com.acme.mailreader.model.Mail;
 /**
  * Comparateur de mails
  * 
- * Comme on désire afficher les mails les plus importants en premier, l'element le plus grand retourne une valeur négative
+ * Comme on dÃ©sire afficher les mails les plus importants en premier, l'element le plus grand retourne une valeur nÃ©gative
  *
  */
 public class MailComparator implements Comparator<Mail> {
 
-	public int compare(Mail obj1, Mail obj2) {
-		if (obj1 == null || obj2 == null) {
+	public int compare(Mail mail1, Mail mail2) {
+		if(oneMailIsNull(mail1,mail2))
+		{
 			return 0;
 		}
-		if (obj1.isImportant() != obj2.isImportant()) {
-			if (obj1.isImportant() && !obj2.isImportant()) {
+		if (mailImportantIsDifferent(mail1, mail2)) {
+			if (mail1MoreImportant(mail1, mail2)) {
 				return -1;
 			} else {
 				return 1;
 			}
 		}
-		if (obj1.getStatut() != obj2.getStatut()) {
-			int comp = obj1.getStatut().ordinal()
-					- obj2.getStatut().ordinal();
+		if (mail1.getStatut() != mail2.getStatut()) {
+			int comp = mail1.getStatut().ordinal()
+					- mail2.getStatut().ordinal();
 			return comp > 0 ? -1 : 1;
 		}
-		if (obj1.getSujet() != obj2.getSujet()) {
-			return obj2.getSujet().compareTo(obj1.getSujet());
+		if (mail1.getSujet() != mail2.getSujet()) {
+			return mail1.getSujet().compareTo(mail2.getSujet());
 		}
-		return obj2.getDate().compareTo(obj1.getDate());
+		return mail2.getDate().compareTo(mail1.getDate());
+	}
+	
+	public boolean oneMailIsNull(Mail mail1, Mail mail2)
+	{
+		if (mail1.isImportant() != mail2.isImportant()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean mailImportantIsDifferent(Mail mail1, Mail mail2)
+	{
+		if(mail1MoreImportant(mail1, mail2)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean mail1MoreImportant(Mail mail1, Mail mail2)
+	{
+		if (mail1.isImportant() && !mail2.isImportant()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 

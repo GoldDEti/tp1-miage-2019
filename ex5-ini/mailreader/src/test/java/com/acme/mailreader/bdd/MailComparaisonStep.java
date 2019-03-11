@@ -1,5 +1,9 @@
 package com.acme.mailreader.bdd;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +12,7 @@ import com.acme.mailreader.domain.DateIncorrecteException;
 import com.acme.mailreader.domain.Mail;
 import com.acme.mailreader.domain.Mail.Statut;
 import com.acme.mailreader.domain.MailComparator;
+import com.acme.mailreader.domain.InstantConverter;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -27,6 +32,8 @@ public class MailComparaisonStep {
 	private Mail mail1;
 	private Mail mail2;
 	private String resultatComparaison;
+	private InstantConverter converter;
+	private int result;
 	Comparator<Mail> comparator = new MailComparator();
 	private static final Map<Integer, String> resuAsString = new HashMap<Integer, String>();
 	static {
@@ -39,26 +46,28 @@ public class MailComparaisonStep {
 	@Given("^un premier mail avec l'importance \"([^\"]*)\", le statut \"([^\"]*)\", le sujet \"([^\"]*)\" et la date \"([^\"]*)\"$")
 	public void un_premier_mail(boolean importance, Statut statut,
 			String sujet, String date) throws DateIncorrecteException {
-		//TODO
+		converter = new InstantConverter();
+		Mail mail1 = new Mail.Builder(sujet).important(importance).statut(statut).date(converter.transform(date)).build();
 	}
 
 	@Given("^un second mail avec l'importance \"([^\"]*)\", le statut \"([^\"]*)\", le sujet \"([^\"]*)\" et la date \"([^\"]*)\"$")
 	public void un_second_mail(boolean importance, Statut statut, String sujet,
 			String date) throws DateIncorrecteException {
-		//TODO
+		Mail mail2 = new Mail.Builder(sujet).important(importance).statut(statut).date(converter.transform(date)).build();
 	}
 
 	
 
 	@When("^je trie$")
 	public void je_trie() throws Throwable {
-		//TODO
+		un_premier_mail(true, Mail.Statut.ENVOYE, "uyyuy", Instant.now().toString());
+		un_second_mail(false, Mail.Statut.ENVOYE, "uyyuy", Instant.now().toString());
+		result = comparator.compare(mail1, mail2);
 	}
 
 	@Then("^le tri doit retourner \"([^\"]*)\"$")
 	public void le_tri_doit_retourner(String resu) throws Throwable {
-		//TODO
-		//assertThat(...);
+		assertThat(comparator.compare(mail1, mail2),is(1));
 	}
 	
 

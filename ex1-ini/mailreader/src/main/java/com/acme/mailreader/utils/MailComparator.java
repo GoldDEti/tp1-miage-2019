@@ -25,9 +25,7 @@ public class MailComparator implements Comparator<Mail> {
 			}
 		}
 		if (mail1.getStatut() != mail2.getStatut()) {
-			int comp = mail1.getStatut().ordinal()
-					- mail2.getStatut().ordinal();
-			return comp > 0 ? -1 : 1;
+			return returnComp(mail1, mail2);
 		}
 		if (mail1.getSujet() != mail2.getSujet()) {
 			return mail1.getSujet().compareTo(mail2.getSujet());
@@ -59,6 +57,13 @@ public class MailComparator implements Comparator<Mail> {
 		} else {
 			return true;
 		}
+	}
+	
+	public int returnComp(Mail mail1, Mail mail2)
+	{
+		int comp = mail1.getStatut().ordinal()
+				- mail2.getStatut().ordinal();
+		return comp > 0 ? -1 : 1;
 	}
 	
 
